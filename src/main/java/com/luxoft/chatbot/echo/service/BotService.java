@@ -1,7 +1,7 @@
-package com.luxoft.chatbot.echo;
+package com.luxoft.chatbot.echo.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
+import com.luxoft.chatbot.echo.dao.PropertyDAO;
+import com.luxoft.chatbot.echo.entity.BotProperties;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,23 +9,22 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
-@PropertySource("classpath:telegram.properties")
-public class Bot extends TelegramLongPollingBot {
+public class BotService extends TelegramLongPollingBot {
 
-    @Value("${bot.username}")
-    private String botUserName;
+    private final BotProperties botProperties;
 
-    @Value("${bot.token}")
-    private String botToken;
+    private BotService(PropertyDAO propertyDAO) {
+        botProperties = propertyDAO.getBotProperty();
+    }
 
     @Override
     public String getBotUsername() {
-        return botUserName;
+        return botProperties.getBotUserName();
     }
 
     @Override
     public String getBotToken() {
-        return botToken;
+        return botProperties.getBotToken();
     }
 
     @Override
