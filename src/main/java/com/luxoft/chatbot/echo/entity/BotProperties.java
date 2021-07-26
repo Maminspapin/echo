@@ -1,5 +1,6 @@
 package com.luxoft.chatbot.echo.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
