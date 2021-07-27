@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name="properties")
 @Getter
 @NoArgsConstructor
-public class BotProperties {
+public class BotProperty {
 
     @Id
     @Column(name = "id")

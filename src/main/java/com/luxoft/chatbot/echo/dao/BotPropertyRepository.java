@@ -1,8 +1,8 @@
 package com.luxoft.chatbot.echo.dao;
 
-import com.luxoft.chatbot.echo.entity.BotProperties;
+import com.luxoft.chatbot.echo.entity.BotProperty;
 import org.springframework.data.repository.CrudRepository;
 
-public interface BotPropertyRepository extends CrudRepository<BotProperties, Integer> {
+public interface BotPropertyRepository extends CrudRepository<BotProperty, Integer> {
 
 }
