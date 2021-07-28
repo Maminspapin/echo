@@ -1,22 +1,47 @@
 package com.luxoft.chatbot.echo.bot;
 
+import com.luxoft.chatbot.echo.dao.ButtonRepository;
 import com.luxoft.chatbot.echo.entity.BotProperty;
+import com.luxoft.chatbot.echo.entity.Button;
 import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
 import com.luxoft.chatbot.echo.service.BotService;
+import com.luxoft.chatbot.echo.service.KeyboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import javax.annotation.PostConstruct;
 
 @Component
 public class EchoBot extends TelegramLongPollingBot {
 
-    private final BotProperty botProperty;
+    private BotProperty botProperty;
+
+    private BotService botService;
+    private KeyboardService keyboardService;
+    private ButtonRepository buttonRepository;
 
     @Autowired
-    private EchoBot(BotService botService) throws NoSuchBotPropertyFound {
+    private void setButtonRepository(ButtonRepository buttonRepository) {
+        this.buttonRepository = buttonRepository;
+    }
+
+    @Autowired
+    private void setBotService(BotService botService) {
+        this.botService = botService;
+    }
+
+    @Autowired
+    private void setKeyboardService(KeyboardService keyboardService) {
+        this.keyboardService = keyboardService;
+    }
+
+    @PostConstruct
+    void init() throws NoSuchBotPropertyFound {
         botProperty = botService.getBotProperties();
     }
 
@@ -34,8 +59,19 @@ public class EchoBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         try {
             SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(update.getMessage().getChatId().toString());
-            sendMessage.setText(update.getMessage().getText());
+            sendMessage.setReplyMarkup(keyboardService.getMainMenuKeyboard());
+
+            Message msg = update.getMessage();
+            String input = msg.getText();
+            String output = input;
+
+            Button button = buttonRepository.findButtonByName(input);
+            if (buttonRepository.findButtonByName(input) != null) {
+                output = button.getCallbackText();
+            }
+
+            sendMessage.setChatId(msg.getChatId().toString());
+            sendMessage.setText(output);
 
             execute(sendMessage);
         } catch (TelegramApiException e) {

@@ -2,13 +2,14 @@ package com.luxoft.chatbot.echo.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "button")
 @Getter
+@Setter
 @NoArgsConstructor
 public class Button {
 
@@ -23,12 +24,7 @@ public class Button {
     @Column(name = "callback_text")
     private String callbackText;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "keyboard_button",
-            joinColumns = @JoinColumn(name = "button_id"),
-            inverseJoinColumns = @JoinColumn(name = "keyboard_id")
-    )
-    private List<KeyBoard> keyBoardProperties;
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "keyboard_id")
+    private Keyboard keyboard;
 }
