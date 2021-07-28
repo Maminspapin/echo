@@ -19,7 +19,7 @@
     name varchar(15),
     PRIMARY KEY (id)
 );
--CREATE TABLE button (
+- CREATE TABLE button (
     id int NOT NULL AUTO_INCREMENT,
     name varchar(15),
     callback_text varchar(100),
