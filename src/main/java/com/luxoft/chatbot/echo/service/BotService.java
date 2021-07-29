@@ -1,25 +1,37 @@
 package com.luxoft.chatbot.echo.service;
 
-import com.luxoft.chatbot.echo.dao.BotRepository;
+import com.luxoft.chatbot.echo.dao.BotPropertyRepository;
 import com.luxoft.chatbot.echo.entity.BotProperty;
 import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BotService {
 
-    private final BotRepository botRepository;
+    private final BotPropertyRepository botPropertyRepository;
 
     @Autowired
-    private BotService(BotRepository botRepository) {
-        this.botRepository = botRepository;
+    private BotService(BotPropertyRepository botPropertyRepository) {
+        this.botPropertyRepository = botPropertyRepository;
+    }
+
+    public List<BotProperty> getAllBotPProperties() {
+        List<BotProperty> result = new ArrayList<>();
+
+        for (BotProperty botProperty : botPropertyRepository.findAll()) {
+            result.add(botProperty);
+        }
+
+        return result;
     }
 
     public BotProperty getBotProperties() throws NoSuchBotPropertyFound {
-        Optional<BotProperty> result = botRepository.findById(1);
+        Optional<BotProperty> result = botPropertyRepository.findById(1);
         if (result.isEmpty()) {
             throw new NoSuchBotPropertyFound("Properties for bot with id=1 is not found in DB. Check it!");
         }
