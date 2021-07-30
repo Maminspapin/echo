@@ -6,6 +6,7 @@ import com.luxoft.chatbot.echo.service.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -37,5 +38,16 @@ public class BotController {
     @GetMapping("/byName/{name}")
     public BotProperty getBotPropertyByName(@PathVariable String name) throws NoSuchBotPropertyFound {
         return botService.getBotPropertyByName(name);
+    }
+
+    @DeleteMapping("/byName/{name}")
+    @Transactional // без аннотации - ошибка, в SpringBoot разве она автоматически не работает?
+    public void deleteBotPropertyByName(@PathVariable String name) {
+        botService.deleteBotPropertyByName(name);
+    }
+
+    @DeleteMapping("/byId/{id}")
+    public void deleteBotPropertyById(@PathVariable int id) {
+        botService.deleteBotPropertyById(id);
     }
 }

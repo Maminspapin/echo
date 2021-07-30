@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface BotPropertyRepository extends CrudRepository<BotProperty, Integer> {
 
     Optional<BotProperty> findBotPropertyByBotUserName(String name);
+
+    void deleteBotPropertyByBotUserName(String name);
 }

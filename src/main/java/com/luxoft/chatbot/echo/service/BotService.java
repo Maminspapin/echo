@@ -52,6 +52,14 @@ public class BotService {
         return result.get();
     }
 
+    public void deleteBotPropertyByName(String name) {
+        botPropertyRepository.deleteBotPropertyByBotUserName(name);
+    }
+
+    public void deleteBotPropertyById(int id) {
+        botPropertyRepository.deleteById(id);
+    }
+
     public BotProperty getBotProperties() throws NoSuchBotPropertyFound {
         return getBotPropertyById(1);
     }
