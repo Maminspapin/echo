@@ -1,11 +1,10 @@
 package com.luxoft.chatbot.echo.rest;
 
 import com.luxoft.chatbot.echo.entity.BotProperty;
+import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
 import com.luxoft.chatbot.echo.service.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +19,23 @@ public class BotController {
         this.botService = botService;
     }
 
+    @PostMapping("/new") // в swagger отображаем id
+    public void saveBotProperty(@RequestBody BotProperty botProperty) {
+        botService.saveBotProperty(botProperty);
+    }
+
     @GetMapping("/all") // светим токен
-    public List<BotProperty> botProperties() {
-        return botService.getAllBotPProperties();
+    public List<BotProperty> getAllBotProperties() {
+        return botService.getAllBotProperties();
+    }
+
+    @GetMapping("/byId/{id}")
+    public BotProperty getBotPropertyById(@PathVariable int id) throws NoSuchBotPropertyFound {
+        return botService.getBotPropertyById(id);
+    }
+
+    @GetMapping("/byName/{name}")
+    public BotProperty getBotPropertyByName(@PathVariable String name) throws NoSuchBotPropertyFound {
+        return botService.getBotPropertyByName(name);
     }
 }

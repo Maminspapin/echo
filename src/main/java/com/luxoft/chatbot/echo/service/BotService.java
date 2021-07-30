@@ -20,7 +20,7 @@ public class BotService {
         this.botPropertyRepository = botPropertyRepository;
     }
 
-    public List<BotProperty> getAllBotPProperties() {
+    public List<BotProperty> getAllBotProperties() {
         List<BotProperty> result = new ArrayList<>();
 
         for (BotProperty botProperty : botPropertyRepository.findAll()) {
@@ -30,12 +30,29 @@ public class BotService {
         return result;
     }
 
-    public BotProperty getBotProperties() throws NoSuchBotPropertyFound {
-        Optional<BotProperty> result = botPropertyRepository.findById(1);
+    public void saveBotProperty(BotProperty botProperty) {
+        botPropertyRepository.save(botProperty);
+    }
+
+    public BotProperty getBotPropertyById(int id) throws NoSuchBotPropertyFound {
+        Optional<BotProperty> result = botPropertyRepository.findById(id);
         if (result.isEmpty()) {
-            throw new NoSuchBotPropertyFound("Properties for bot with id=1 is not found in DB. Check it!");
+            throw new NoSuchBotPropertyFound("Properties for bot with id=" + id + " is not found in DB. Check it!");
         }
 
         return result.get();
+    }
+
+    public BotProperty getBotPropertyByName(String name) throws NoSuchBotPropertyFound {
+        Optional<BotProperty> result = botPropertyRepository.findBotPropertyByBotUserName(name);
+        if (result.isEmpty()) {
+            throw new NoSuchBotPropertyFound("Properties for bot with name=" + name + " is not found in DB. Check it!");
+        }
+
+        return result.get();
+    }
+
+    public BotProperty getBotProperties() throws NoSuchBotPropertyFound {
+        return getBotPropertyById(1);
     }
 }
