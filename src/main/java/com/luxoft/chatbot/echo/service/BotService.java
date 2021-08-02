@@ -6,17 +6,19 @@ import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class BotService {
 
     private final BotPropertyRepository botPropertyRepository;
 
     @Autowired
-    private BotService(BotPropertyRepository botPropertyRepository) {
+    public BotService(BotPropertyRepository botPropertyRepository) {
         this.botPropertyRepository = botPropertyRepository;
     }
 
