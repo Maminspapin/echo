@@ -1,6 +1,5 @@
 package com.luxoft.chatbot.echo.entity;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,4 +25,9 @@ public class BotProperty {
 
     @Column(name = "token")
     private String botToken;
+
+    public BotProperty(String botUserName, String botToken) {
+        this.botUserName = botUserName;
+        this.botToken = botToken;
+    }
 }
