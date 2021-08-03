@@ -5,12 +5,15 @@ import com.luxoft.chatbot.echo.dto.BotPropertyDTO;
 import com.luxoft.chatbot.echo.entity.BotProperty;
 import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
 import com.luxoft.chatbot.echo.service.BotService;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api(tags = {"Rest for bots managing"})
 @RestController
 @RequestMapping("/api/bot")
 public class BotController {
@@ -29,12 +32,18 @@ public class BotController {
     }
 
     @PostMapping("/new")
-    public void saveBotProperty(@RequestBody BotPropertyDTO botPropertyDTO) {
+    @ApiOperation("Создание нового бота")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @ApiResponses(value = @ApiResponse(code = 201, message = "Created successfully"))
+    public void saveBotProperty(@RequestBody @ApiParam("Модель данных бота (DTO)") BotPropertyDTO botPropertyDTO) {
         BotProperty botProperty = mapper.botPropertyDTOtoEntity(botPropertyDTO);
         botService.saveBotProperty(botProperty);
     }
 
     @GetMapping("/all")
+    @ApiOperation("Список всех ботов")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(value = @ApiResponse(code = 200, message = "Success"))
     public List<BotPropertyDTO> getAllBotProperties() {
         List<BotProperty> list = botService.getAllBotProperties();
         return list.stream()
@@ -43,24 +52,36 @@ public class BotController {
     }
 
     @GetMapping("/{id}")
-    public BotPropertyDTO getBotPropertyById(@PathVariable int id) throws NoSuchBotPropertyFound {
+    @ApiOperation("Получение бота по его id")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(value = @ApiResponse(code = 200, message = "Success"))
+    public BotPropertyDTO getBotPropertyById(@PathVariable @ApiParam("Id бота") int id) throws NoSuchBotPropertyFound {
         BotProperty botProperty = botService.getBotPropertyById(id);
         return mapper.botPropertyEntityToDTO(botProperty);
     }
 
     @GetMapping("/")
-    public BotPropertyDTO getBotPropertyByName(@RequestParam(value = "name") String name) throws NoSuchBotPropertyFound {
+    @ApiOperation("Получение бота по имени")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(value = @ApiResponse(code = 200, message = "Success"))
+    public BotPropertyDTO getBotPropertyByName(@RequestParam(value = "name") @ApiParam("Имя бота") String name) throws NoSuchBotPropertyFound {
         BotProperty botProperty = botService.getBotPropertyByName(name);
         return mapper.botPropertyEntityToDTO(botProperty);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBotPropertyById(@PathVariable int id) {
+    @ApiOperation("Удаление бота по его id")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(value = @ApiResponse(code = 200, message = "Success"))
+    public void deleteBotPropertyById(@PathVariable @ApiParam("Id бота") int id) {
         botService.deleteBotPropertyById(id);
     }
 
     @DeleteMapping("/")
-    public void deleteBotPropertyByName(@RequestParam(value = "name") String name) {
+    @ApiOperation("Удаление бота по имени")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(value = @ApiResponse(code = 200, message = "Success"))
+    public void deleteBotPropertyByName(@RequestParam(value = "name") @ApiParam("Имя бота") String name) {
         botService.deleteBotPropertyByName(name);
     }
 }
