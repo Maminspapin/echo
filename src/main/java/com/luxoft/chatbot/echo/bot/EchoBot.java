@@ -1,8 +1,6 @@
 package com.luxoft.chatbot.echo.bot;
 
-import com.luxoft.chatbot.echo.dao.ButtonRepository;
 import com.luxoft.chatbot.echo.entity.BotProperty;
-import com.luxoft.chatbot.echo.entity.Button;
 import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
 import com.luxoft.chatbot.echo.service.BotService;
 import com.luxoft.chatbot.echo.service.KeyboardService;
@@ -21,22 +19,12 @@ public class EchoBot extends TelegramLongPollingBot {
 
     private BotProperty botProperty;
 
-    private BotService botService;
-    private KeyboardService keyboardService;
-    private ButtonRepository buttonRepository;
+    private final BotService botService;
+    private final KeyboardService keyboardService;
 
     @Autowired
-    private void setButtonRepository(ButtonRepository buttonRepository) {
-        this.buttonRepository = buttonRepository;
-    }
-
-    @Autowired
-    private void setBotService(BotService botService) {
+    private EchoBot(BotService botService, KeyboardService keyboardService) {
         this.botService = botService;
-    }
-
-    @Autowired
-    private void setKeyboardService(KeyboardService keyboardService) {
         this.keyboardService = keyboardService;
     }
 
@@ -65,10 +53,11 @@ public class EchoBot extends TelegramLongPollingBot {
             String input = msg.getText();
             String output = input;
 
-            Button button = buttonRepository.findButtonByName(input);
-            if (buttonRepository.findButtonByName(input) != null) {
-                output = button.getCallbackText();
-            }
+            // TODO сделать ответ по кнопке меню
+//            Button button = buttonRepository.findButtonByName(input);
+//            if (buttonRepository.findButtonByName(input) != null) {
+//                output = button.getCallbackText();
+//            }
 
             sendMessage.setChatId(msg.getChatId().toString());
             sendMessage.setText(output);
