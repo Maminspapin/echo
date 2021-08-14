@@ -1,4 +1,4 @@
-package com.luxoft.chatbot.echo.utils;
+package com.luxoft.chatbot.echo.util;
 
 import com.luxoft.chatbot.echo.dto.BotPropertyDTO;
 import com.luxoft.chatbot.echo.entity.BotProperty;

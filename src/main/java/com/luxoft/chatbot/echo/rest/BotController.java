@@ -1,6 +1,6 @@
 package com.luxoft.chatbot.echo.rest;
 
-import com.luxoft.chatbot.echo.utils.Mapper;
+import com.luxoft.chatbot.echo.util.Mapper;
 import com.luxoft.chatbot.echo.dto.BotPropertyDTO;
 import com.luxoft.chatbot.echo.entity.BotProperty;
 import com.luxoft.chatbot.echo.exception.NoSuchBotPropertyFound;
