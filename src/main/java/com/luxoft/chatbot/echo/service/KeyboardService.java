@@ -1,12 +1,9 @@
 package com.luxoft.chatbot.echo.service;
 
 import com.luxoft.chatbot.echo.dto.ButtonDTO;
-import com.luxoft.chatbot.echo.dto.KeyboardDTO;
-import lombok.Getter;
+import com.luxoft.chatbot.echo.сlient.KeyboardWebClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -17,14 +14,11 @@ import java.util.List;
 @Service
 public class KeyboardService {
 
-    private final WebClient webClient;
-
-    @Getter
+    private final KeyboardWebClient keyboardWebClient;
     private final ReplyKeyboardMarkup menu;
 
-    @Autowired
-    public KeyboardService(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl("http://localhost:8082").build();
+    public KeyboardService(@Autowired KeyboardWebClient keyboardWebClient) {
+        this.keyboardWebClient = keyboardWebClient;
 
         menu = new ReplyKeyboardMarkup();
         menu.setSelective(true);
@@ -34,13 +28,8 @@ public class KeyboardService {
 
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
 
-        // TODO при первом обращении пропускает doOnSuccess-стадию
-        webClient
-                .get()
-                .uri("/api/keyboard/?name=test")
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(KeyboardDTO.class)
+        keyboardWebClient
+                .getKeyboard()
                 .doOnSuccess(e -> addButtonsToKeyboard(e.getButtons(), e.getButtonsInARow()))
                 .subscribe();
 
