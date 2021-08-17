@@ -1,4 +1,4 @@
-package com.luxoft.chatbot.echo;
+package com.luxoft.chatbot.echo.config;
 
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
