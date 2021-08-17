@@ -7,33 +7,31 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class KeyboardService {
 
     private final KeyboardWebClient keyboardWebClient;
-    private final ReplyKeyboardMarkup menu;
+    private ReplyKeyboardMarkup menu;
 
     public KeyboardService(@Autowired KeyboardWebClient keyboardWebClient) {
         this.keyboardWebClient = keyboardWebClient;
-
-        menu = new ReplyKeyboardMarkup();
-        menu.setSelective(true);
-        menu.setResizeKeyboard(true);
-        menu.setOneTimeKeyboard(false);
+        createMenu();
     }
 
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
 
-        keyboardWebClient
+        return keyboardWebClient
                 .getKeyboard()
                 .filter(e -> e.getButtons() != null)
-                .subscribe(e -> addButtonsToKeyboard(menu, e.getButtons(), e.getButtonsInARow()));
-
-        return menu;
+                .doOnNext(e -> addButtonsToKeyboard(e.getButtons(), e.getButtonsInARow()))
+                .map(e -> menu)
+                .block();
     }
 
     private void addButtonsToKeyboard(List<ButtonDTO> buttons, int maxRowElements) {
@@ -52,6 +50,13 @@ public class KeyboardService {
         rows.add(row);
 
         menu.setKeyboard(rows);
+    }
+
+    private void createMenu() {
+        menu = new ReplyKeyboardMarkup();
+        menu.setSelective(true);
+        menu.setResizeKeyboard(true);
+        menu.setOneTimeKeyboard(false);
     }
 
 }
