@@ -30,8 +30,8 @@ public class KeyboardService {
 
         keyboardWebClient
                 .getKeyboard()
-                .doOnSuccess(e -> addButtonsToKeyboard(e.getButtons(), e.getButtonsInARow()))
-                .subscribe();
+                .filter(e -> e.getButtons() != null)
+                .subscribe(e -> addButtonsToKeyboard(menu, e.getButtons(), e.getButtonsInARow()));
 
         return menu;
     }
