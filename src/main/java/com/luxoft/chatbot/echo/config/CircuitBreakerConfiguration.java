@@ -24,7 +24,7 @@ public class CircuitBreakerConfiguration {
     @Bean
     public ReactiveCircuitBreaker countCircuitBreaker() {
 
-        cbFactory.configureDefault(s -> new Resilience4JConfigBuilder("Config CB")
+        cbFactory.configureDefault(s -> new Resilience4JConfigBuilder(s.toString())
                 .timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(5)).build())
                 .circuitBreakerConfig(config())
                 .build());
@@ -40,6 +40,9 @@ public class CircuitBreakerConfiguration {
                 .slidingWindowSize(5)
                 .slowCallRateThreshold(50.0f)
                 .slowCallDurationThreshold(Duration.ofSeconds(1))
+                .minimumNumberOfCalls(10)
+                .waitDurationInOpenState(Duration.ofSeconds(30))
+                .enableAutomaticTransitionFromOpenToHalfOpen()
                 .build();
     }
 }
