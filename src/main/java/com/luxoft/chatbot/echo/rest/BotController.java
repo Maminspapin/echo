@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class BotController {
     @ApiOperation("Создание нового бота")
     @ResponseStatus(code = HttpStatus.CREATED)
     @ApiResponses(value = @ApiResponse(code = 201, message = "Created successfully"))
-    public void saveBotProperty(@RequestBody @ApiParam("Модель данных бота (DTO)") BotPropertyDTO botPropertyDTO) {
+    public void saveBotProperty(@Valid @RequestBody @ApiParam("Модель данных бота (DTO)") BotPropertyDTO botPropertyDTO) {
         BotProperty botProperty = mapper.botPropertyDTOtoEntity(botPropertyDTO);
         botService.saveBotProperty(botProperty);
     }
