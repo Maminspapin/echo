@@ -1,4 +1,4 @@
-package com.luxoft.chatbot.echo.rest.swagger;
+package com.luxoft.chatbot.echo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-public class SpringFoxConfig {
+public class SpringFoxConfiguration {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
